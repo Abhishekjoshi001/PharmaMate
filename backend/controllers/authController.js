@@ -3,33 +3,54 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
-export const register = async (req,res)=>{
+export const register = async (req, res) => {
     try {
-        const {fullname,username,password,confirmpassword,phonenumber,gender} = req.body;
-        if(password!=confirmpassword){
-            return res.status(400).json({error:"Passwords dont match"});
+        const { fullname, username, password, confirmpassword, phonenumber, gender } = req.body;
+
+        //validations
+        if (!fullname) {
+            return res.send({ error: "Name is Required" });
         }
-        const user = await User.findOne({username});
-        if(user){
-            return res.status(201).json({error:"Username already exists"})
+        if (!gender) {
+            return res.status(400).json({ message: "Gender is Required" });
+        }
+        if (!username) {
+            return res.status(400).json({ message: "Username is Required" });
+        }
+        if (!password) {
+            return res.status(400).json({ message: "Password is Required" });
+        }
+        if (!phonenumber) {
+            return res.status(400).json({ message: "Phone no is Required" });
+        }
+        if (!confirmpassword) {
+            return res.status(400).json({ message: "Confirm password required" });
+        }
+
+        if (password != confirmpassword) {
+            return res.status(400).json({ error: "Passwords dont match" });
+        }
+        const user = await User.findOne({ username });
+        if (user) {
+            return res.status(201).json({ error: "Username already exists" })
         }
 
         // Hashing Password
         const salt = await bcrypt.genSalt(10);
-        const hashedpassword = await bcrypt.hash(password,salt);
+        const hashedpassword = await bcrypt.hash(password, salt);
 
         //Creating new user
         const newUser = new User({
             fullname,
             username,
-            password:hashedpassword,
+            password: hashedpassword,
             phonenumber,
             gender
         });
 
         await newUser.save();
 
-        generateTokenAndSetCookie(res,newUser._id);
+        generateTokenAndSetCookie(res, newUser._id);
 
         res.status(301).json({
             _id: newUser._id,
@@ -40,19 +61,25 @@ export const register = async (req,res)=>{
 
     } catch (error) {
         console.log(`Error in Register page ${error}`);
-        res.status(501).json({error:"Internal server error"});
+        res.status(501).json({ error: "Internal server error" });
     }
 }
-export const login= async (req,res)=>{
+export const login = async (req, res) => {
     try {
-        const {username,password} = req.body;
-        const user = await User.findOne({username});
-        const isPasswordCorrect = await bcrypt.compare(password,user?.password || "");
-        if(!user || !isPasswordCorrect){
-            return res.status(201).json({error:"Invalid username or password"})
+        const { username, password } = req.body;
+        if (!username) {
+            return res.status(201).json({ message: "Username is Required" });
+        }
+        if (!password) {
+            return res.status(201).json({ message: "Password is Required" });
+        }
+        const user = await User.findOne({ username });
+        const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
+        if (!user || !isPasswordCorrect) {
+            return res.status(201).json({ error: "Invalid username or password" })
         }
 
-        generateTokenAndSetCookie(res,user._id);
+        generateTokenAndSetCookie(res, user._id);
 
         res.status(301).json({
             _id: user._id,
@@ -63,15 +90,45 @@ export const login= async (req,res)=>{
 
     } catch (error) {
         console.log(`Error in Login page ${error}`);
-        res.status(501).json({error:"Internal server error"});
+        res.status(501).json({ error: "Internal server error" });
     }
 }
 export const logout = (req, res) => {
     try {
-          res.cookie("jwt","",{maxAge: 0});
-          res.status(200).json({message:"Logged out Succesfully"});
+        res.cookie("jwt", "", { maxAge: 0 });
+        res.status(200).json({ message: "Logged out Succesfully" });
     } catch (error) {
         console.log(`Error in Logout controller ${error}`);
         res.status(500).json({ error: "Internal server error" });
     }
 };
+
+export const forgotpassword = async (req, res) => {
+    try {
+        const { username, phonenumber, newPassword } = req.body;
+        if (!username) {
+            return res.status(201).json({ message: "Username is Required" });
+        }
+        if (!phonenumber) {
+            return res.status(201).json({ message: "Phone number is Required" });
+        }
+        if (!newPassword) {
+            return res.status(201).json({ message: "NewPassword is Required" });
+        }
+
+        const user = await User.findOne({ username, phonenumber });
+        if (!user) {
+            res.status(301).json({ error: "Wrong username or phone number" })
+        }
+
+        // Hashing Password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+        res.status(200).json({ message: "Passsword changed Succesfully" });
+    } catch (error) {
+        console.log(`Error in Forgot password controller ${error}`);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
