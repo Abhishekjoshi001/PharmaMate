@@ -25,10 +25,14 @@ const userSchema = new Schema({
     required: true,
     enum: ["male","female"],
   },
-  role: {
+  answer: {
     type: Number,
     default: 0,
   },
+  role: {
+    type: Number,
+    default: 0,
+  }
 });
 
 const User = mongoose.model("newUser",userSchema);

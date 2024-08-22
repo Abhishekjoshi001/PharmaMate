@@ -5,7 +5,7 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const register = async (req, res) => {
     try {
-        const { fullname, username, password, confirmpassword, phonenumber, gender } = req.body;
+        const { fullname, username, password, confirmpassword, phonenumber, gender,answer } = req.body;
 
         //validations
         if (!fullname) {
@@ -26,6 +26,9 @@ export const register = async (req, res) => {
         if (!confirmpassword) {
             return res.status(400).json({ message: "Confirm password required" });
         }
+        if (!answer) {
+            return res.status(400).json({ message: "Answer is required" });
+        }
 
         if (password != confirmpassword) {
             return res.status(400).json({ error: "Passwords dont match" });
@@ -45,7 +48,8 @@ export const register = async (req, res) => {
             username,
             password: hashedpassword,
             phonenumber,
-            gender
+            gender,
+            answer
         });
 
         await newUser.save();
@@ -105,7 +109,7 @@ export const logout = (req, res) => {
 
 export const forgotpassword = async (req, res) => {
     try {
-        const { username, phonenumber, newPassword } = req.body;
+        const { username, phonenumber,answer, newPassword, } = req.body;
         if (!username) {
             return res.status(201).json({ message: "Username is Required" });
         }
@@ -116,9 +120,9 @@ export const forgotpassword = async (req, res) => {
             return res.status(201).json({ message: "NewPassword is Required" });
         }
 
-        const user = await User.findOne({ username, phonenumber });
+        const user = await User.findOne({ username, phonenumber,answer });
         if (!user) {
-            res.status(301).json({ error: "Wrong username or phone number" })
+            res.status(301).json({ error: "Wrong username or phone number or answer" })
         }
 
         // Hashing Password
