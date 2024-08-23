@@ -26,8 +26,8 @@ const userSchema = new Schema({
     enum: ["male","female"],
   },
   answer: {
-    type: Number,
-    default: 0,
+    type: String,
+    require:true
   },
   role: {
     type: Number,
