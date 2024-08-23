@@ -20,6 +20,7 @@ export const addMedicine = async (req,res)=>{
 
         await newMedicine.save();
     } catch (error) {
-        
+        console.error("Error in medicine controller:", error);
+        res.status(404).json({error:"Internal server error"})
     }
 }
