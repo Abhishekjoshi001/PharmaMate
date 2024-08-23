@@ -1,7 +1,9 @@
-import express from "express"
-import { updateProfile } from "../controllers/userController.js"
-const router = express.Router()
+import express from "express";
+import { auth } from "../middleware/auth.js";
+import { updateProfile } from "../controllers/userController.js";
 
-router.post("/updateprofile",updateProfile)
+const router = express.Router();
+
+router.post("/updateprofile", auth, updateProfile);
 
 export default router;
