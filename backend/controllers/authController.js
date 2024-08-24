@@ -72,15 +72,15 @@ export const login = async (req, res) => {
     try {
         const { username, password } = req.body;
         if (!username) {
-            return res.status(201).json({ message: "Username is Required" });
+            return res.status(400).json({ message: "Username is Required" });
         }
         if (!password) {
-            return res.status(201).json({ message: "Password is Required" });
+            return res.status(400).json({ message: "Password is Required" });
         }
         const user = await User.findOne({ username });
         const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
         if (!user || !isPasswordCorrect) {
-            return res.status(201).json({ error: "Invalid username or password" })
+            return res.status(401).json({ error: "Invalid username or password" })
         }
 
         generateTokenAndSetCookie(res, user._id);
@@ -94,7 +94,7 @@ export const login = async (req, res) => {
 
     } catch (error) {
         console.log(`Error in Login page ${error}`);
-        res.status(501).json({ error: "Internal server error" });
+        res.status(404).json({ error: "Internal server error" });
     }
 }
 export const logout = (req, res) => {
@@ -103,7 +103,7 @@ export const logout = (req, res) => {
         res.status(200).json({ message: "Logged out Succesfully" });
     } catch (error) {
         console.log(`Error in Logout controller ${error}`);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(404).json({ error: "Internal server error" });
     }
 };
 
@@ -111,18 +111,18 @@ export const forgotpassword = async (req, res) => {
     try {
         const { username, phonenumber,answer, newPassword, } = req.body;
         if (!username) {
-            return res.status(201).json({ message: "Username is Required" });
+            return res.status(401).json({ message: "Username is Required" });
         }
         if (!phonenumber) {
-            return res.status(201).json({ message: "Phone number is Required" });
+            return res.status(401).json({ message: "Phone number is Required" });
         }
         if (!newPassword) {
-            return res.status(201).json({ message: "NewPassword is Required" });
+            return res.status(401).json({ message: "NewPassword is Required" });
         }
 
         const user = await User.findOne({ username, phonenumber,answer });
         if (!user) {
-            res.status(301).json({ error: "Wrong username or phone number or answer" })
+            res.status(404).json({ error: "Wrong username or phone number or answer" })
         }
 
         // Hashing Password
@@ -133,6 +133,6 @@ export const forgotpassword = async (req, res) => {
         res.status(200).json({ message: "Passsword changed Succesfully" });
     } catch (error) {
         console.log(`Error in Forgot password controller ${error}`);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(404).json({ error: "Internal server error" });
     }
 }
