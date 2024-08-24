@@ -1,6 +1,5 @@
 import Medicine from "../models/medicinemodel.js";
-import Medicine from "../models/medicinemodel.js";
-import User from "../models/userModel.js";
+
 
 export const addMedicine = async (req, res) => {
     try {
@@ -14,7 +13,7 @@ export const addMedicine = async (req, res) => {
         }
         const newMedicine = await new Medicine({
             user: userId,
-            medincinePic,
+            medicinePic,
             medicineName,
             noOfTabs,
             expiry,
@@ -70,12 +69,12 @@ export const updateMedicine = async (req, res) => {
             res.status(404).json({message:"Medicine not found"});
         }
 
-        updatedmedicinePic = medicinePic||medicine.medicinePic;
-        updatedmedicineName = medicineName||medicine.medicineName;
-        updatednoOfTabs = noOfTabs||medicine.noOfTabs;
-        updatedexpiry = expiry||medicine.expiry;
-        updatedcategory = category||medicine.category;
-        updatedDosage = dosage||medicine.dosage;
+        medicine.medicinePic = medicinePic||medicine.medicinePic;
+        medicine.medicineName = medicineName||medicine.medicineName;
+        medicine.noOfTabs = noOfTabs||medicine.noOfTabs;
+        medicine.expiry = expiry||medicine.expiry;
+        medicine.category = category||medicine.category;
+        medicine.dosage = dosage||medicine.dosage;
 
 
         const updatedMedicine = await medicine.save();
