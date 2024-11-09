@@ -7,7 +7,8 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.3",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "react-router-dom": "^6.27.0"
   },
   "name": "pharmamate",
   "description": "npm run dev for sever start\r This is medical related website",
