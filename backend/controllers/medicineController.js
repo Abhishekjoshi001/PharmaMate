@@ -55,7 +55,7 @@ export const deleteMedicine = async (req, res) => {
         console.error("Error in delete medicine controller:", error);
         res.status(404).json({ error: "Internal server error" })
     }
-}
+} 
 
 export const updateMedicine = async (req, res) => {
     try {

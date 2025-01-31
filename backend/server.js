@@ -5,12 +5,14 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js"
 import cookieParser from "cookie-parser"; // Add this import
-
+import cors from "cors";
 const PORT = process.env.PORT || 8000;
 const app = express();
 
 dotenv.config();
 
+
+app.use(cors());
 app.use(express.json()); // Parsing JSON
 app.use(cookieParser()); // Parse cookies
 app.use("/api/auth", authRoutes);
