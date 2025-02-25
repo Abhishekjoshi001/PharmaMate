@@ -3,8 +3,16 @@ import User from "../models/userModel.js";
 
 export const auth = async (req, res, next) => {
   try {
-    // Retrieve token from cookies
-    const token = req.cookies.jwt;
+    let token;
+
+    // 1️⃣ Check for token in Authorization header
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+      token = req.headers.authorization.split(" ")[1];
+    } 
+    // 2️⃣ Check for token in cookies (fallback)
+    else if (req.cookies?.jwt) {
+      token = req.cookies.jwt;
+    }
 
     if (!token) {
       return res.status(401).json({ message: "No token provided, access denied" });
@@ -12,11 +20,10 @@ export const auth = async (req, res, next) => {
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if(!decoded){
-      return res.status(401).json({error:"Invalid Token"});
+    if (!decoded) {
+      return res.status(401).json({ error: "Invalid Token" });
     }
 
-     
     // Find user and attach to request object
     const user = await User.findById(decoded.id).select("-password");
     if (!user) {

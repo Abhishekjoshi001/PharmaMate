@@ -7,7 +7,6 @@ export const register = async (req, res) => {
     console.log("Request body:", req.body);
     try {
         const { fullname, username, password, confirmpassword, phonenumber, gender, answer } = req.body;
-        console.log("0")
         // Validations
         if (!fullname) {
             return res.status(400).json({ error: "Name is Required" });
@@ -54,7 +53,6 @@ export const register = async (req, res) => {
             gender,
             answer
         });
-        console.log("2nd");
 
         await newUser.save();
 
@@ -71,7 +69,7 @@ export const register = async (req, res) => {
                 phonenumber: newUser.phonenumber
             }
         });
-        console.log("3rd");
+
 
     } catch (error) {
         console.log(`Error in Register page ${error}`);

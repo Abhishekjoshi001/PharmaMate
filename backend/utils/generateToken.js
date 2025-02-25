@@ -13,6 +13,8 @@ const generateTokenAndSetCookie = (res, userId) => {
     maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days expiration
     sameSite: "strict", // Strict same-site policy to prevent CSRF
   });
+
+  return token; // ✅ Return the token so it can be sent in the response
 };
 
 export default generateTokenAndSetCookie;

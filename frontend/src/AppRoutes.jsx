@@ -6,6 +6,7 @@ import Profile from "./pages/profile.jsx";
 import Notification from "./pages/notification.jsx";
 import RegisterPage from "./pages/registerpage.jsx";
 import Login from "./pages/loginpage.jsx";
+import AddMedicine from "./pages/addmedicine.jsx";
 function AppRoutes() {
   return (
     <Routes>
@@ -13,6 +14,7 @@ function AppRoutes() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/inventory" element={<Inventory />} />
+      <Route path="/addmedicine" element={<AddMedicine />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/notifications" element={<Notification />} />
     </Routes>

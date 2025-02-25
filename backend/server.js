@@ -12,7 +12,10 @@ const app = express();
 dotenv.config();
 
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173", // ✅ Allow requests from Vite frontend
+  credentials: true, // ✅ Allow cookies and Authorization headers
+}));
 app.use(express.json()); // Parsing JSON
 app.use(cookieParser()); // Parse cookies
 app.use("/api/auth", authRoutes);

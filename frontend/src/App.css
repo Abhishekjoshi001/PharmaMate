@@ -2,8 +2,9 @@
     background-image: url("../public/images/HomePageBG.jpg");
     background-size: cover;
     background-position: center;
-    height: 100vh; /* Set height to full viewport */
-    width: 100vw; /* Optional: Set width to full viewport */
+    background-attachment: fixed;
+    /*height: 100vh; /* Set height to full viewport */
+    /*width: 100vw; /* Optional: Set width to full viewport */
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -11,7 +12,7 @@
     
 }
 .heading{
-    font-size: 90px;
+    font-size: 80px;
     font-family: "Libre Baskerville", serif;
     font-weight: 700;
     font-style: normal;
@@ -29,3 +30,5 @@
 .register-components{
     margin-top: 100px;
 }
+
+/* Inventory */

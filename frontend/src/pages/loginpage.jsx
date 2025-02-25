@@ -35,6 +35,7 @@ function Login() {
                     token: response.data.token,
                 })
                 localStorage.setItem("auth", JSON.stringify(response.data))
+                console.log("Stored Auth Data:", localStorage.getItem("auth"));
                 navigate("/")
             } else {
                 toast.error(response.data.message);
