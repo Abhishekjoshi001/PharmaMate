@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 
 function AddMedicine() {
@@ -14,9 +14,9 @@ function AddMedicine() {
 
   // Check if the user is logged in (authentication)
   useEffect(() => {
-    const token = localStorage.getItem("auth");
+    const auth = JSON.parse(localStorage.getItem("auth")); // Retrieve stored auth data
+    const token = auth?.token;
     if (!token) {
-      // Redirect to login page if no token found
       navigate("/login");
     }
   }, [navigate]);
@@ -39,15 +39,17 @@ function AddMedicine() {
       formData.append("category", category);
       formData.append("dosage", dosage);
 
+      const auth = JSON.parse(localStorage.getItem("auth")); // Retrieve stored auth data
+      const token = auth?.token;
+
       // Send data to the backend to add the medicine
-      await axios.post('http://localhost:8000/api/auth/addMedicine', formData, {
+      await axios.post("http://localhost:8000/api/medicine/add", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
-          "Authorization": `Bearer ${localStorage.getItem("auth")}`, // Attach token in the header
-        },
+          Authorization: `Bearer ${token}`,
+          withCredentials: true,
+      },
       });
 
-      // Redirect after successfully adding the medicine
       navigate("/inventory");
     } catch (error) {
       console.error("Error adding medicine:", error);

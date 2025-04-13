@@ -1,6 +1,6 @@
-import React from "react";
 import AppRoutes from "./AppRoutes.jsx";
 import Layout from "./components/Layout.jsx";
+import { Toaster } from "react-hot-toast";
 import "./App.css";
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
     <div className="App">
         <Layout>
           <AppRoutes />
+          <Toaster />
         </Layout>
     </div>
   );

@@ -3,7 +3,7 @@ import Medicine from "../models/medicinemodel.js";
 // Add Medicine
 export const addMedicine = async (req, res) => {
     try {
-        const { medicinePic, medicineName, noOfTabs, expiry, category, dosage } = req.body;
+        const {medicineName, noOfTabs, expiry, category, dosage } = req.body;
         const userId = req.user._id;
 
         // Validate required fields
@@ -13,7 +13,7 @@ export const addMedicine = async (req, res) => {
         if (!expiry) {
             return res.status(400).json({ error: "Expiry date of medicine is required" });
         }
-
+        const medicinePic = req.file ? req.file.buffer.toString('base64') : null;
         const newMedicine = new Medicine({
             user: userId,
             medicinePic,

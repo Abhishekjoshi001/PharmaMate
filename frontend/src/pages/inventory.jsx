@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../utils/axios";
 
 const Inventory = () => {
     const [medicines, setMedicines] = useState([]); // State to store medicines
@@ -14,9 +14,9 @@ const Inventory = () => {
 
                 if (!token) {
                     console.error("No token found. Redirecting to login.");
-                    alert("Session expired. Please log in again.");
                     localStorage.removeItem("auth");
                     navigate("/login");
+                    // toast.error("Session expired. Please log in again.");
                     return;
                 }
 
@@ -32,11 +32,10 @@ const Inventory = () => {
             } catch (error) {
                 console.error("Error fetching medicines:", error);
 
-                if (error.response?.status === 401) {
-                    alert("Session expired. Please log in again.");
-                    localStorage.removeItem("auth");
-                    navigate("/login");
-                }
+                // if (error.response?.status === 401) {
+                //     localStorage.removeItem("auth");
+                //     navigate("/login");
+                // }
             }
         };
 
@@ -49,14 +48,14 @@ const Inventory = () => {
             <div className="flex flex-wrap gap-5">
                 {medicines.length > 0 ? (
                     medicines.map((med) => (
-                        <div 
-                            key={med._id} 
+                        <div
+                            key={med._id}
                             className="border border-gray-300 p-4 rounded-lg w-48 text-center shadow-md"
                         >
-                            <img 
-                                src={med.medicinePic || "https://via.placeholder.com/150"} 
-                                alt={med.medicineName} 
-                                className="w-full rounded-lg mb-2" 
+                            <img
+                                src={med.medicinePic ? `http://localhost:8000${med.medicinePic}` : "https://via.placeholder.com/150"}
+                                alt={med.medicineName}
+                                className="w-full rounded-lg mb-2"
                             />
                             <h3 className="font-semibold text-lg">{med.medicineName}</h3>
                             <p className="text-sm mb-1">Tablets: {med.noOfTabs}</p>
@@ -69,6 +68,13 @@ const Inventory = () => {
                     <p className="text-center text-gray-500">No medicines found.</p>
                 )}
             </div>
+            <button
+                onClick={() => navigate("/addmedicine")}
+                className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-800 transition"
+            >
+                Add medicine
+            </button>
+
         </div>
     );
 };

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import axios from 'axios'
+import { useState } from "react";
+import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/auth";
@@ -17,7 +17,7 @@ function Login() {
 
         // Basic validation before making the request
         if (!username || !password) {
-            alert("Please fill in all fields.");
+            toast.error("Please fill in all fields.");
             return;
         }
 
@@ -28,7 +28,7 @@ function Login() {
                 password,
             });
             if (response && response.data.success) {
-                alert(response.data.message);
+                toast.success(response.data.message)
                 setAuth({
                     ...auth,
                     user: response.data.user,
@@ -42,9 +42,10 @@ function Login() {
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                alert("Invalid username of password");
+                toast.error("Invalid username or password");
             } else {
                 console.error("Login error", error);
+                toast.error("Something went wrong. Please try again.");
             }
         }
     };

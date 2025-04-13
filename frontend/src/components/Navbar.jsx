@@ -16,7 +16,7 @@ function Navbar() {
     try {
       const response = await axios.post('http://localhost:8000/api/auth/logout');
       if (response && response.data.success) {
-        alert(response.data.message);
+        toast.success(response.data.message);
         setAuth({
           user: null,
           token: ""

@@ -21,6 +21,8 @@ app.use(cookieParser()); // Parse cookies
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/medicine", medicineRoutes);
+app.use("/uploads", express.static("uploads"));
+
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello world<h1>");

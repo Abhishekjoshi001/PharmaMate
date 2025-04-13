@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from 'axios'
+import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../App.css"
@@ -48,9 +48,10 @@ function RegisterPage() {
             }
         } catch (error) {
             if (error.response && error.response.status === 409) {
-                alert("Username already exists");
+                toast.error("Username already exists");
             } else {
                 console.error("Registration error", error);
+                toast.error("Something went wrong");
             }
         }
     };
